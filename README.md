@@ -1,3 +1,6 @@
 # Group-4
 CS-472, Dr. Businge UNLV Class Project
-This is an initial change (#1).
+
+Our Discord  https://discord.gg/GwDYhNjY
+
+(please consider the Eulogy project idea just tentative until we all have a chance to choose)
