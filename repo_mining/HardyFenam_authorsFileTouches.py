@@ -67,7 +67,7 @@ def countfiles(dictfiles, lsttokens, repo):
 repo = 'scottyab/rootbeer'
 
 # GitHub authentication tokens
-lstTokens = ["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"]
+lstTokens = ["removed for security"]
 
 # dictionary to store data for final file authors CSV 
 dictfiles = defaultdict(lambda: {"authors": [], "dates": [], "touch_count": 0})
