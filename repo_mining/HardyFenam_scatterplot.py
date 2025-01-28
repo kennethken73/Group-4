@@ -66,3 +66,5 @@ ax.set_ylabel("Weeks Since Project Start")
 ax.set_title("Scatter Plot of Files vs. Weeks with Authors' Colors")
 plt.tight_layout()
 plt.show()
+# create image file
+fig.savefig("data/scatter_plot.png")
