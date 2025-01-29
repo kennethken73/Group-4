@@ -28,7 +28,7 @@ with open(file_path, 'r', encoding='utf-8') as file:
 
         data[filename] = {"authors": authors, "dates": dates, "touch_count": touch_count}
 
-#determine the project start date so we can calculate weeks since start
+#determine the project start date to calculate weeks since start
 all_dates = [datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ") for file in data.values() for date in file["dates"]]
 project_start_date = min(all_dates)  #earliest date in the project
 
@@ -45,7 +45,7 @@ num_authors = len(unique_authors)
 #create a color palette with unique colors for each author
 color_palette = plt.get_cmap("tab20", num_authors)
 for idx, author in enumerate(unique_authors):
-    authors_colors[author] = color_palette(idx)  #assign a unique color from the colormap
+    authors_colors[author] = color_palette(idx)  #assign a unique color from colormap
 
 #create scatter plot of files vs. weeks since project start with authors' colors
 fig, ax = plt.subplots(figsize=(12, 6))
