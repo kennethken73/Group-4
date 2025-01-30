@@ -4,6 +4,7 @@ import matplotlib.colors as mcolors
 
 
 def generate_scatter_plot(csv_file):
+
     # load the data from the CSV
     data = pd.read_csv(csv_file)
     
@@ -16,6 +17,11 @@ def generate_scatter_plot(csv_file):
     # compute weeks since the project started
     data["Week"] = ((data["Date"] - project_start).dt.days // 7) + 1
 
+    # assign a unique number to each filename
+    unique_files = sorted(data["Filename"].unique())  # Sort to maintain consistency
+    file_to_number = {file: idx for idx, file in enumerate(unique_files, start=1)}
+    data["FileNumber"] = data["Filename"].map(file_to_number)
+
     # assign a unique color to each author
     authors = data["Author"].unique()
     available_colors = list(mcolors.TABLEAU_COLORS.values())
@@ -27,12 +33,12 @@ def generate_scatter_plot(csv_file):
             color_map[author] = available_colors[len(color_map) % len(available_colors)]
         return color_map[author]
 
-    # plot scatter points for each author
+    # plot activity for each filename
     plt.figure(figsize=(12, 8))
     for author, group in data.groupby("Author"):
         plt.scatter(
+            group["FileNumber"],
             group["Week"],
-            group["Filename"],
             label=author,
             color=get_color(author),
             alpha=0.6,
@@ -40,10 +46,12 @@ def generate_scatter_plot(csv_file):
             s=100,
         )
 
-    plt.title("File Touches by Week and Author", fontsize=16)
-    plt.xlabel("Week of the Year", fontsize=14)
-    plt.ylabel("Filename", fontsize=14)
-    plt.legend(title="Author", fontsize=10, loc="upper right", bbox_to_anchor=(1.2, 1))
+    plt.title("File Modification Activity Over Time", fontsize=16)
+    plt.xlabel("File Number", fontsize=14)
+    plt.ylabel("Weeks Since Project Start", fontsize=14)
+    plt.xticks(ticks=range(1, len(unique_files) + 1, max(1, len(unique_files) // 10)))
+    plt.gca().invert_yaxis()
+    plt.legend(title="Author", fontsize=10, loc="center left", bbox_to_anchor=(1.02, 0.5), borderaxespad=1)
     plt.grid(True, linestyle="--", alpha=0.5)
     plt.tight_layout()
 
