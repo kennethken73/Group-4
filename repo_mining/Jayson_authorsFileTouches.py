@@ -1,7 +1,4 @@
 # Modified version of CollectFiles.py for getting author/date data
-# Plan: Source files are defined as files containing code written in a language
-    # Source files are determined by the file extension
-        # .java (5 files), .kts (4 files), .kt (9 files), .cpp (1 file), .h (1 file), .txt (1 file)
 import json
 import requests
 import csv
@@ -34,7 +31,6 @@ def countfiles(dictfiles, lsttokens, repo):
     try:
         # loop though all the commit pages until the last returned empty page
         while True:
-            # Get all commits
             spage = str(ipage)
             commitsUrl = 'https://api.github.com/repos/' + repo + '/commits?page=' + spage + '&per_page=100'
             jsonCommits, ct = github_auth(commitsUrl, lsttokens, ct)
@@ -46,7 +42,6 @@ def countfiles(dictfiles, lsttokens, repo):
             if len(jsonCommits) == 0:
                 break
             # iterate through the list of commits in  spage
-            # Get each commit - want 'commit' and 'files'
             for shaObject in jsonCommits:
                 sha = shaObject['sha']
                 # For each commit, use the GitHub commit API to extract the files touched by the commit
@@ -62,20 +57,22 @@ def countfiles(dictfiles, lsttokens, repo):
                     filename = filenameObj['filename']
 
                     # Get source files by checking extensions
-                    root, extension = os.path.splitext(filename)
+                    # Source files are determined by the file extension
+                    _, extension = os.path.splitext(filename)
                     if extension not in extensions:
                         continue
 
                     # Get author and date data
                     authorData = shaDetails['commit']['author']
-                    currentData = (authorData['name'], authorData['date'])
 
-                    # Add info to dict such that dictfiles[filename] = [(author, date), (author, date), ...]
-                    dictfiles[filename] = dictfiles.get(filename, [])
-                    dictfiles[filename].append(currentData)
+                    # Add info to dictfiles
+                    currentData = {filename: authorData['date']}
+                    dictfiles[authorData['name']] = dictfiles.get(authorData['name'], [])
+                    dictfiles[authorData['name']].append(currentData)
 
-                    print(filename)
-                    print(dictfiles[filename])
+                    print(authorData['name'])
+                    print(dictfiles[authorData['name']])
+                    print()
             ipage += 1
     except:
         print("Error receiving data")
@@ -94,4 +91,8 @@ extensions = ['.java', '.kts', '.kt', '.cpp', '.h', '.txt']
 
 dictfiles = dict()  # Contains commit history (author/date) for each file
 countfiles(dictfiles, lstTokens, repo)
-print('Total number of source files: ' + str(len(dictfiles)))
+# print('Total number of source files: ' + str(len(dictfiles)))
+
+# Creating a file containing dictfiles to use for scatterplot.py
+with open('Jayson_scatterplotData.txt', 'w') as file:
+    json.dump(dictfiles, file)
