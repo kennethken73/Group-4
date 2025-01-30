@@ -7,8 +7,14 @@ def generate_scatter_plot(csv_file):
     # load the data from the CSV
     data = pd.read_csv(csv_file)
     
-    # convert dates to weeks
-    data["Week"] = pd.to_datetime(data["Date"]).dt.isocalendar().week
+    # convert date to datetime format
+    data["Date"] = pd.to_datetime(data["Date"])
+
+    # find the project start date (earliest commit)
+    project_start = data["Date"].min()
+
+    # compute weeks since the project started
+    data["Week"] = ((data["Date"] - project_start).dt.days // 7) + 1
 
     # assign a unique color to each author
     authors = data["Author"].unique()
