@@ -14,19 +14,19 @@ def github_auth(url, lsttoken, ct):
         ct = ct % len(lsttoken)
         headers = {'Authorization': 'Bearer {}'.format(lsttoken[ct])}
         request = requests.get(url, headers=headers)
-        request.raise_for_status()
         jsonData = json.loads(request.content)
         ct += 1
     except Exception as e:
-        print(f"Error: {e}")
+        pass
+        print(e)
     return jsonData, ct
 
 
-# Collect authors and dates for source files
+# collect authors and dates for source files
 def collect_authors_and_dates(repo, lsttokens, source_extensions):
     file_data = {}
-    ipage = 1  # Page counter for commits API
-    ct = 0  # Token counter
+    ipage = 1  # url page counter
+    ct = 0  # token counter
 
     try:
         while True:
@@ -34,7 +34,7 @@ def collect_authors_and_dates(repo, lsttokens, source_extensions):
             commits_url = f'https://api.github.com/repos/{repo}/commits?page={spage}&per_page=100'
             commits, ct = github_auth(commits_url, lsttokens, ct)
 
-            if not commits:  # No more commits
+            if not commits:  # no more commits
                 break
 
             for commit in commits:
@@ -45,11 +45,11 @@ def collect_authors_and_dates(repo, lsttokens, source_extensions):
                 author = commit_details['commit']['author']['name']
                 date = commit_details['commit']['author']['date']
 
-                # Extract files touched in the commit
+                # extract files touched in the commit
                 for file in commit_details.get('files', []):
                     filename = file['filename']
 
-                    # Filter for source files by extension
+                    # filter for source files by extension
                     if any(filename.endswith(ext) for ext in source_extensions):
                         if filename not in file_data:
                             file_data[filename] = []
@@ -64,18 +64,16 @@ def collect_authors_and_dates(repo, lsttokens, source_extensions):
 
 
 if __name__ == "__main__":
-    # Repository details
-    repo = "scottyab/rootbeer"  # Replace with your repository
-    lstTokens = ["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"]  # Replace with your GitHub tokens
 
-    # Define source file extensions (based on programming languages)
+    repo = "scottyab/rootbeer" 
+    lstTokens = ["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"] 
+
     source_extensions = ['.py', '.java', '.c', '.cpp', '.js', '.ts']
 
-    # Collect authors and dates
     file_authors_dates = collect_authors_and_dates(repo, lstTokens, source_extensions)
 
     if file_authors_dates:
-        # Save results to a CSV file
+        # save to csv file
         output_file = f"data/authors_file_touches.csv"
         with open(output_file, "w", newline="") as csvfile:
             writer = csv.writer(csvfile)
