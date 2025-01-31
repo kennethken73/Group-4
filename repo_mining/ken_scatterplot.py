@@ -32,25 +32,25 @@ def populateData():
   # TODO find a better way to do this
   match person:
    # case "None" person_id = 0
-   case "Ken Harvey":                # 1
+   case "Ken Harvey" | "kennethken73":             # 1
     person_id = 1
-   case "Adam Hamou":                # 2
+   case "Adam Hamou" | "AdamoHamou":               # 2
     person_id = 2
-   case "Michael Soffer":            # 3
+   case "Michael Soffer" | "michaelsoffer":        # 3
     person_id = 3
-   case "Parham Pahlavan":           # 4
+   case "Parham Pahlavan" | "RISINGCHART719":      # 4
     person_id = 4
-   case "Kevin Ramos":               # 5
+   case "Kevin Ramos" | "Kemoshu":                 # 5
     person_id = 5
-   case "Hardy F.":                  # 6
+   case "Hardy F." | "hhrh":                       # 6
     person_id = 6
-   case "tannerdonovan":             # 7
+   case "tannerdonovan" | "overperformer":         # 7
     person_id = 7
-   case "Jayson Kirchand-Patel":     # 8
+   case "Jayson Kirchand-Patel" | "Kirchpa":       # 8
     person_id = 8
-   case "Richard Vargasan":          # 9
+   case "Richard Vargasan" | "richvar":            # 9
     person_id = 9
-   case "John Zaleschuk":            # 10
+   case "John Zaleschuk" | "John-Zaleschuk":       # 10
     person_id = 10
 
   id.append(person_id)
