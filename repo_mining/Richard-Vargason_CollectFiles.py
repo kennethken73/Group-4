@@ -21,9 +21,6 @@ def github_auth(url, lsttoken, ct):
         print(e)
     return jsonData, ct
 
-# @dictFiles, empty dictionary of files
-# @lstTokens, GitHub authentication tokens
-# @repo, GitHub repo
 def countfiles(dictfiles, lsttokens, repo):
     ipage = 1  # url page counter
     ct = 0  # token counter
