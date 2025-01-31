@@ -68,7 +68,6 @@ countfiles(dictfiles, lstTokens, repo)
 print('Total number of files: ' + str(len(dictfiles)))
 
 file = repo.split('/')[1]
-# change this to the path of your file
 fileOutput = 'data/file_' + file + '.csv'
 rows = ["Filename", "Touches"]
 fileCSV = open(fileOutput, 'w')
