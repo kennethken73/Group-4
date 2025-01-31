@@ -1,0 +1,20 @@
+[
+     {
+          "commitSHA": "f7b88f0470d67413e4a626b876afbe9abf9d469d",
+          "author": "Kemoshu",
+          "date": "2025-01-29T04:12:07Z",
+          "files": [
+               "repo_mining/Kevin_authorsFileTouches.py",
+               "repo_mining/Kevin_scatterplot.py"
+          ]
+     },
+     {
+          "commitSHA": "04d2aae1c6f730d775301f389f10761d0ae0d63b",
+          "author": "Kemoshu",
+          "date": "2025-01-29T03:48:51Z",
+          "files": [
+               "repo_mining/Kevin_authorsFileTouches.py",
+               "repo_mining/Kevin_scatterplot.py"
+          ]
+     }
+]
