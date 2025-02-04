@@ -85,9 +85,39 @@ Each test should include:
 - A meaningful **commit message** when submitting their PR.
 """
 
-# TODO 1: Test Account Serialization
-# - Ensure `to_dict()` correctly converts an account to a dictionary format.
-# - Verify that all expected fields are included in the dictionary.
+# =======================================================================
+# Test: A dictionary is returned via .to_dict()
+# Author: Ken Harvey
+# Date: 2025-2-3
+# Description: Ensure `to_dict()` correctly converts an account to a dictionary format.
+# =======================================================================
+def dictionary_version_of_account_is_a_dictionary():
+    """Test that a dictionary is returned using .to_dict()
+
+    We avoid ORM interaction by testing the Account object without
+    uploading and downloading the object or its dictionary counterpart.
+    """
+
+    account_dict = Account(name="Ken H", email="kenh@xyz.com", role="user").to_dict()
+    assert isinstance(account_dict, dict)
+
+# =======================================================================
+# Test: .to_dict() creates a dictionary with all of the fields that the Account object had
+# Author: Ken Harvey
+# Date: 2025-2-3
+# Description: Verify that all expected fields are included in the dictionary.
+# =======================================================================
+def dictionary_version_of_account_has_all_account_fields():
+    """Test that .to_dict() returns a dictionary with all the Account fields
+
+    We avoid ORM interaction by testing the Account object without
+    uploading and downloading the object or its dictionary counterpart.
+    """
+
+    account_dict = Account(name="Ken H", email="kenh@xyz.com", role="user").to_dict()
+    list_of_dict_keys = list(account_dict.keys())
+    for key in list_of_dict_keys:
+        assert hasattr(account_dict, key)
 
 # TODO 2: Test Invalid Email Input
 # - Check that invalid emails (e.g., "not-an-email") raise a validation error.
