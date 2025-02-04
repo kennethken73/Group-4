@@ -16,6 +16,7 @@
 ###   Files we all have and none of us should upload
 #
 *.db
+.DS_Store
 /repo_mining/data/
 /test_coverage_lab/.coverage
 /test_coverage_lab/.DS_Store
@@ -29,6 +30,7 @@
 /test_coverage_lab/tests/__init__.py
 /test_coverage_lab/tests/fixtures/
 /test_coverage_lab/tests/.DS_Store
+/tdd_lab/.DS_Store
 
 ### Contributor gitignore
 ###   Files we might individually have, and don't need uploaded
