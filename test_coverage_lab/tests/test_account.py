@@ -105,6 +105,30 @@ Each test should include:
 # - Ensure `deposit()` raises an error for zero or negative amounts.
 # - Verify that balance remains unchanged after an invalid deposit attempt.
 
+# ===========================
+# Test: Deposit with Zero/Negative Values Values
+# Author: Kevin Ramos
+# Date: 2025-02-03
+# Description: Ensure that deposit rases a DataValidationError for a zero or negative deposit ensuring the balance remains unchanged.
+# ===========================
+
+def test_deposit_zero_negative():
+    """Test deposit zero or negative to raise data validation error and leaves balance unchanged."""
+    account = Account(name = "Kevin Ramos", email = "ramosk10@example.com", role = "user")
+    account.balance = 100
+
+    balance = account.balance
+    
+    # Test depositing 0
+    with pytest.raises(DataValidationError):
+        account.deposit(0)
+    assert account.balance == balance, "Balance should be unchanged after depositing zero"
+
+    # Test depositing a negative value
+    with pytest.raises(DataValidationError):
+        account.deposit(-1)
+    assert account.balance == balance, "Balance stays the same after depositing negative amount"
+
 # TODO 6: Test Valid Withdrawal
 # - Ensure `withdraw()` correctly decreases the account balance.
 # - Verify that withdrawals within available balance succeed.
