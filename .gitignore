@@ -11,11 +11,23 @@
 #     git -rm -rf  (have it added to .gitignore, and commit)
 #     Beware this also removes the file from local (try --cached?).
 
+
 ### Group-wide gitignore
 ###   Files we all have and none of us should upload
 #
 /repo_mining/data/
-
+/test_coverage_lab/.coverage
+/test_coverage_lab/.DS_Store
+/test_coverage_lab/test.db
+/test_coverage_lab/.pytest_cache/
+/test_coverage_lab/instance/
+/test_coverage_lab/migrations/
+/test_coverage_lab/models/__pycache__/
+/test_coverage_lab/models/__init__.py
+/test_coverage_lab/tests/__pycache__/
+/test_coverage_lab/tests/__init__.py
+/test_coverage_lab/tests/fixtures/
+/test_coverage_lab/tests/.DS_Store
 
 ### Contributor gitignore
 ###   Files we might individually have, and don't need uploaded
