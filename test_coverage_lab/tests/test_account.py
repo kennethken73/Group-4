@@ -123,6 +123,21 @@ def dictionary_version_of_account_has_all_account_fields():
 # - Check that invalid emails (e.g., "not-an-email") raise a validation error.
 # - Ensure accounts without an email cannot be created.
 
+# ===========================
+# Test: Test Invalid Email Input
+# Author: Hardy Fenam
+# Date: 2025-02-04
+# Description: Ensure accounts without an email cannot be created.
+# ===========================
+
+def test_invalid_email_input():
+    """Test that accounts without an email cannot be created"""
+    account = Account(name="John Doe", email="", role="user")
+
+    #attempt to create an account without email
+    with pytest.raises(DataValidationError):
+        account.validate_email()  #invalid email should raise an error
+
 # TODO 3: Test Missing Required Fields
 # - Ensure that creating an `Account()` without required fields raises an error.
 # - Validate that missing fields trigger the correct exception.
