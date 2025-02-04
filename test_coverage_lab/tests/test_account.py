@@ -142,6 +142,25 @@ def test_deposit_zero_negative():
 # - Verify that plaintext passwords are never stored in the database.
 # - Test password verification with `set_password()` and `check_password()`.
 
+# ===========================
+# Test: Test Password Hashing
+# Author: Jayson Kirchand-Patel
+# Date: 2025-02-03
+# Description: Ensures passwords are stored as hashed values
+# ===========================
+
+def test_password_hashing():
+    '''Test storing passwords as hashed values'''
+    test_password = "password"
+    account = Account()
+
+    # Set password and verify it's not being stored as plaintext
+    account.set_password(test_password)
+    assert account.password_hash != test_password
+
+    # Ensure password is successfully stored as hashed value
+    assert account.check_password(test_password)
+
 # TODO 9: Test Role Assignment
 # - Ensure that `change_role()` correctly updates an account’s role.
 # - Verify that the updated role is stored in the database.
