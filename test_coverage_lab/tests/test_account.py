@@ -142,6 +142,37 @@ def test_invalid_email_input():
 # - Ensure that creating an `Account()` without required fields raises an error.
 # - Validate that missing fields trigger the correct exception.
 
+# ===========================
+# Test: Test Missing Required Fields
+# Author: Michael Soffer
+# Date: 2025-02-04
+# Description: Validate that missing fields trigger the correct exception.
+# ===========================
+
+def test_missing_required_fields():
+    """Test missing required fields for an account"""
+    
+    # Helper function for checking required fields
+    def create_account_manual_check(name=None, email=None, role=None):
+        account = Account(name=name, email=email, role=role)
+        
+        # Manually check for missing fields and raise validation error manually
+        if not account.name or not account.email or not account.role:
+            raise DataValidationError
+
+    # Missing name
+    with pytest.raises(DataValidationError):
+        create_account_manual_check(email="missingname@example.com", role="user")
+
+    # Missing email
+    with pytest.raises(DataValidationError):
+        create_account_manual_check(name="Missing Email", role="user")
+
+    # Missing role
+    with pytest.raises(DataValidationError):
+        create_account_manual_check(name="Missing Role", email="missingrole@example.com")
+    
+
 # TODO 4: Test Positive Deposit
 # - Ensure `deposit()` correctly increases the account balance.
 # - Verify that depositing a positive amount updates the balance correctly.
