@@ -177,6 +177,20 @@ def test_missing_required_fields():
 # - Ensure `deposit()` correctly increases the account balance.
 # - Verify that depositing a positive amount updates the balance correctly.
 
+# ===========================
+# Test: Positive Deposit
+# Author: Tanner Donovan
+# Date: 2/5/2025
+# Description: Tests positive deposit
+# ===========================
+
+def test_positive_deposit():
+    """Test depositing a positive amount"""
+    account = Account(name="Tanner", email="tannertdonovan@gmail.com", balance=25)
+    account.deposit(75)
+
+    assert account.balance == 100
+
 # TODO 5: Test Deposit with Zero/Negative Values
 # - Ensure `deposit()` raises an error for zero or negative amounts.
 # - Verify that balance remains unchanged after an invalid deposit attempt.
