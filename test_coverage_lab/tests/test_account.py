@@ -214,7 +214,29 @@ def test_password_hashing():
 # - Ensure that assigning an invalid role raises an appropriate error.
 # - Verify that only allowed roles (`admin`, `user`, etc.) can be set.
 
-# TODO 11: Test Deleting an Account
-# - Ensure that `delete()` removes an account from the database.
-# - Verify that attempting to retrieve a deleted account returns `None` or raises an error.
+# ===========================
+# Test: Test Deleting an Account
+# Author: John Zaleschuk
+# Date: 2025-02-04
+# Description: Ensure that 'delete()' removes an account from the database.
+# ===========================
+
+def test_deleting_an_account():
+    """Test deleting an account"""
+    # Add a test account to database
+    account = Account(name="John Test", email="johntest@test.com", role="user")
+    db.session.add(account)
+    db.session.commit()
+    
+    # Verify the account is in the database
+    tempaccount = Account.query.filter_by(email="johntest@test.com")
+    assert tempaccount is not None
+    
+    # Delete the account
+    tempaccount.delete()
+    
+    # Check again for the account
+    tempaccount = Account.query.filter_by(email="johntest@test.com")
+    assert tempaccount is None
+
 
