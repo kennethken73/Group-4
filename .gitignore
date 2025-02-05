@@ -17,7 +17,9 @@
 #
 *.db
 .DS_Store
+
 /repo_mining/data/
+
 /test_coverage_lab/.coverage
 /test_coverage_lab/.DS_Store
 /test_coverage_lab/test.db
@@ -30,7 +32,17 @@
 /test_coverage_lab/tests/__init__.py
 /test_coverage_lab/tests/fixtures/
 /test_coverage_lab/tests/.DS_Store
+
 /tdd_lab/.DS_Store
+/tdd_lab/doc/
+/tdd_lab/src/__init__.py
+/tdd_lab/src/status.py
+/tdd_lab/tests/__init__.py
+/tdd_lab/LICENSE
+/tdd_lab/README.md
+/tdd_lab/pytest.ini
+/tdd_lab/requirements.txt
+
 
 ### Contributor gitignore
 ###   Files we might individually have, and don't need uploaded
