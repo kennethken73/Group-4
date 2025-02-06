@@ -28,6 +28,7 @@ class TestCounterEndpoints:
         result = client.post('/counters/foo')
         assert result.status_code == status.HTTP_201_CREATED
 
+    # Test #5: Increment existing counter.
     def test_increment_counter(self, client):
             """It should increment an existing counter using PUT /counters/<name>."""
             # Counter named 'incrementTest'
