@@ -38,12 +38,16 @@
 /tdd_lab/.coverage
 /tdd_lab/LICENSE
 /tdd_lab/README.md
-/tdd_lab/doc/
 /tdd_lab/pytest.ini
 /tdd_lab/requirements.txt
+
+/tdd_lab/doc/
+
 /tdd_lab/src/__init__.py
 /tdd_lab/src/status.py
+
 /tdd_lab/tests/__init__.py
+
 
 ### Contributor gitignore
 ###   Files we might individually have, and don't need uploaded

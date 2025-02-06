@@ -28,6 +28,14 @@ class TestCounterEndpoints:
         result = client.post('/counters/foo')
         assert result.status_code == status.HTTP_201_CREATED
 
+    # Test #8: Prevent deleting non-existent counter
+    def test_deleting_nonexistent_counter(self, client):
+        '''It should prevent deleting a non-existent counter'''
+        # Attempting to delete counter that doesn't exist
+        result = client.delete('/counters/testcounter')
+        # Check if a conflict status code was returned
+        assert result.status_code == status.HTTP_409_CONFLICT
+
     # Test #10, listing all counters
     def test_list_counters(self, client):
         """It should list all counters"""
