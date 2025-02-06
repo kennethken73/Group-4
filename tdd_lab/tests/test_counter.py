@@ -27,6 +27,16 @@ class TestCounterEndpoints:
         result = client.post('/counters/foo')
         assert result.status_code == status.HTTP_201_CREATED
 
+    # Test #2: Prevent duplicate counters
+    def test_prevent_duplicate_counters(self, client):
+        """It should prevent creating a duplicate counter"""
+        # create a counter
+        client.post('/counters/foo')
+        # attempt to create the same counter
+        result = client.post('/counters/foo')
+        # check if we were successful
+        assert result.status_code == status.HTTP_409_CONFLICT
+
     # Test #8: Prevent deleting non-existent counter
     def test_deleting_nonexistent_counter(self, client):
         '''It should prevent deleting a non-existent counter'''
