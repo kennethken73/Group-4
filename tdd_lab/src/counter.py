@@ -44,41 +44,14 @@ def list_counters():
     counterNames = list(COUNTERS.keys())
     return jsonify(counterNames), status.HTTP_200_OK 
 
-############################################################################
-# Test #11.:  Handle invalid HTTP methods.
-#             Targeting Unsupported HTTP Methods
-#
-# Name:       Ken Harvey
-# Test-name:  test_bad_http_api_call_is_handled()
-# TDD cure:   src/counter.py:method_not_allowed(err)
-#
-# Citations:
-# 1. google query: "what are the flask api http methods"
-#    Found:        https://www.geeksforgeeks.org/flask-http-method/
-#    AI suggests:  AI gave a list and brief description of supported methods
-# 2. google query: "how to handle an unsupported http method in flask"
-#    AI suggests:  AI suggestion appended to my lab report.
-#                  Using this as a starting point,
-#                  as I've zero previous python experience, much less flask.
-# 3. google query: "flask get list of allowed http methods"
-#    AI suggests:  allowed_methods = request.url_rule.methods
-#
-# Learned:   1. Apparently a flask 'route' is a location on dir tree.
-#            2. Routes are assigned methods
-#            3. @ syntax is for 'Python Decorators'
-#
-#    @app.errorhandler(405)
-#    def method_not_allowed(e):
-#         return jsonify({'error': 'Method Not Allowed'}), 405
-############################################################################
-# @app.route('/counters')
-# def warn_if_http_method_is_unsupported(msg_status_code):
-#     look = request.args.get("")
-#     return "warn"
+# Function #11: Handle invalid HTTP methods [Ken Harvey]
+@app.route('/counters/error/<id>', methods=['GET'])
+def handle_invalid_http_methods(id):
+  """Here, this route permits only GET,
+     so long as no other permissions were set elsewhere for this route.
+  """
+  print('Setting GET as method for route: /counters/error/<id>')
 
-# @app.route('<route>')
-# def method_is_supported(route, client, method):
-#     if request.method == 'POST':
-#         result = client.post(route)
-#     return False
+
+
 
