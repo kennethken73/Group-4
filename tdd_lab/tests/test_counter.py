@@ -53,6 +53,16 @@ class TestCounterEndpoints:
             assert "incrementTest" in data
             assert data["incrementTest"] == 1
 
+    # Test #7: Delete a counter
+    def test_delete_counter(self, client):
+        """It should delete a counter"""
+        # create a counter to be deleted
+        client.post('/counters/boo')
+        # delete the counter
+        result = client.delete('/counters/boo')
+        # check if we were successful
+        assert result.status_code == status.HTTP_200_OK
+
     # Test #8: Prevent deleting non-existent counter
     def test_deleting_nonexistent_counter(self, client):
         '''It should prevent deleting a non-existent counter'''
