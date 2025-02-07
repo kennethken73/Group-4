@@ -62,10 +62,8 @@ class TestCounterEndpoints:
            which disallows the method.
            Once the route /counters/error/<id> is created (in counter.py) with
            methods=['GET'], the following post will indeed return 405"""
-        # fail if no route, of course
         result = client.post('/counters/error/id')  # line#1 POST is not allowed on this route
         # result = client.get('/counters/error/id') # line#2 this is ok
-        assert result.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-        # I would first check that the route exists, but then this TDD does not fail
-        # before the implementation is created in counter.py
+        assert result.status_code != status.HTTP_404_NOT_FOUND             # route exists
+        assert result.status_code == status.HTTP_405_METHOD_NOT_ALLOWED    # route method is invalid
  
