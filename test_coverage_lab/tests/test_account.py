@@ -227,6 +227,26 @@ def test_deposit_zero_negative():
 # - Ensure `withdraw()` raises an error when attempting to withdraw more than available balance.
 # - Verify that the balance remains unchanged after a failed withdrawal.
 
+# ===========================
+# Test: Test Withdrawal with Insufficient Funds
+# Author: Adam Hamou
+# Date: 2025-02-06
+# Description: Ensure that the balance remains unchanged after a failed withdrawal.
+# ===========================
+
+def test_withdrawal_insufficient_funds():
+    """Test withdrawal with insufficient funds"""
+    account = Account(name="Adam", email="hamoua2@example.com", balance=100)
+    balance = account.balance
+
+    # Attempt to withdraw more than the available balance
+    with pytest.raises(DataValidationError):
+        account.withdraw(200)   # Withdrawal amount exceeds balance
+    
+    # Verify that the balance remains unchanged
+    assert account.balance == balance, "Balance should remain unchanged after a failed withdrawal"
+
+
 # TODO 8: Test Password Hashing
 # - Ensure that passwords are stored as **hashed values**.
 # - Verify that plaintext passwords are never stored in the database.
