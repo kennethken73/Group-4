@@ -12,6 +12,7 @@ how to call the web service and assert what it should return.
 import pytest
 from src import app
 from src import status
+# from . import counter #for test #11
 
 @pytest.fixture()
 def client():
@@ -28,6 +29,7 @@ class TestCounterEndpoints:
         assert result.status_code == status.HTTP_201_CREATED
 
     # Test #2: Prevent duplicate counters
+    # [Please list your name as well]
     def test_prevent_duplicate_counters(self, client):
         """It should prevent creating a duplicate counter"""
         # create a counter
@@ -36,6 +38,20 @@ class TestCounterEndpoints:
         result = client.post('/counters/foo')
         # check if we were successful
         assert result.status_code == status.HTTP_409_CONFLICT
+        
+    # Test #5: Increment existing counter.
+    def test_increment_counter(self, client):
+            """It should increment an existing counter using PUT /counters/<name>."""
+            # Counter named 'incrementTest'
+            create_response = client.post('/counters/incrementTest')
+            assert create_response.status_code == status.HTTP_201_CREATED
+            # Increment the counter using PUT
+            put_response = client.put('/counters/incrementTest')
+            assert put_response.status_code == status.HTTP_200_OK
+            # Verify that the counter's value is now incremented by 1
+            data = put_response.get_json()
+            assert "incrementTest" in data
+            assert data["incrementTest"] == 1
 
     # Test #8: Prevent deleting non-existent counter
     def test_deleting_nonexistent_counter(self, client):
@@ -63,3 +79,54 @@ class TestCounterEndpoints:
         assert "testcounter1" in counterlist
         assert "testcounter2" in counterlist
         assert "testcounter3" in counterlist
+
+
+    ############################################################################
+    # Test #11.:  Handle invalid HTTP methods.
+    #             Targeting Unsupported HTTP Methods
+    #
+    # Name:       Ken Harvey
+    # Test-name:  test_bad_http_api_call_is_handled()
+    # TDD cure:   src/counter.py:method_not_allowed(err)
+    #
+    # Citations:
+    # 1. google query: "what are the flask api http methods"
+    #    Found:        https://www.geeksforgeeks.org/flask-http-method/
+    #    AI suggests:  AI gave a list and brief description of supported methods
+    # 2. google query: "how to handle an unsupported http method in flask"
+    #    AI suggests:  AI suggestion appended to my lab report.
+    #                  Using this as a starting point,
+    #                  as I've zero previous python experience, much less flask.
+    # 3. google query: "flask get list of allowed http methods"
+    #    AI suggests:  allowed_methods = request.url_rule.methods
+    #
+    # Learned:   1. Apparently a flask 'route' is a location on dir tree.
+    #            2. Routes are assigned methods
+    #            3. @ syntax is for 'Python Decorators'
+    ############################################################################
+    # ### idea1
+    # def test_warn_if_http_method_is_unsupported(self, client):
+    #     """If warn_if_http_method_is_unsupported() works right,
+    #     then a get request to a route without GET method authorization
+    #     """
+    #     msg = client.post('/counters/e405')  #creates '/counter/e405'
+    #     # d_result = client.delete('/counters/e405')  #should fail as 'delete' isn't authorized?
+
+    #     # get_msg = client.get('/counters/e405')
+    #     # Above does not fail, even though get_msg.status_code == 405
+    #     # assert get_msg.status_code == status.HTTP_200_OK
+    #     # msg_status_code = get_msg.status_code
+    #     # assert get_msg.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+    #     # assert warn_if_http_method_is_unsupported(msg_status_code) == "warn"
+        
+    #     response = client.post('/counters/test_405')
+    #     unsupported_delete_response = client.delete('/counters/test_405')
+    #     assert unsupported_delete_response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+    # ###
+
+    ### idea2
+    # def test_method_is_supported(route, method):
+    #     assert method_is_supported(route, client, method) == True
+
+#NOTE this_test(self, client) here in test_counter
+#  while test(route, method) ..
