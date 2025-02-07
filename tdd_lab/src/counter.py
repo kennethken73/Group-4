@@ -18,6 +18,15 @@ def create_counter(name):
   COUNTERS[name] = 0
   return jsonify({name: COUNTERS[name]}), status.HTTP_201_CREATED
 
+# Student 5: Increment a counter
+@app.route('/counters/<name>', methods=['PUT'])
+def increment_counter(name):
+    """Increment the counter by 1."""
+    if not counter_exists(name):
+        return jsonify({"error": f"Counter {name} does not exist"}), status.HTTP_404_NOT_FOUND
+    COUNTERS[name] += 1
+    return jsonify({name: COUNTERS[name]}), status.HTTP_200_OK
+
 # Function #8: Prevent deleting non-existent counter
 @app.route('/counters/<name>', methods=['DELETE'])
 def deleting_nonexistent_counter(name):

@@ -28,6 +28,20 @@ class TestCounterEndpoints:
         result = client.post('/counters/foo')
         assert result.status_code == status.HTTP_201_CREATED
 
+    # Test #5: Increment existing counter.
+    def test_increment_counter(self, client):
+            """It should increment an existing counter using PUT /counters/<name>."""
+            # Counter named 'incrementTest'
+            create_response = client.post('/counters/incrementTest')
+            assert create_response.status_code == status.HTTP_201_CREATED
+            # Increment the counter using PUT
+            put_response = client.put('/counters/incrementTest')
+            assert put_response.status_code == status.HTTP_200_OK
+            # Verify that the counter's value is now incremented by 1
+            data = put_response.get_json()
+            assert "incrementTest" in data
+            assert data["incrementTest"] == 1
+
     # Test #8: Prevent deleting non-existent counter
     def test_deleting_nonexistent_counter(self, client):
         '''It should prevent deleting a non-existent counter'''
