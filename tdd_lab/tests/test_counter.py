@@ -56,52 +56,16 @@ class TestCounterEndpoints:
         assert "testcounter3" in counterlist
 
 
-    ############################################################################
-    # Test #11.:  Handle invalid HTTP methods.
-    #             Targeting Unsupported HTTP Methods
-    #
-    # Name:       Ken Harvey
-    # Test-name:  test_bad_http_api_call_is_handled()
-    # TDD cure:   src/counter.py:method_not_allowed(err)
-    #
-    # Citations:
-    # 1. google query: "what are the flask api http methods"
-    #    Found:        https://www.geeksforgeeks.org/flask-http-method/
-    #    AI suggests:  AI gave a list and brief description of supported methods
-    # 2. google query: "how to handle an unsupported http method in flask"
-    #    AI suggests:  AI suggestion appended to my lab report.
-    #                  Using this as a starting point,
-    #                  as I've zero previous python experience, much less flask.
-    # 3. google query: "flask get list of allowed http methods"
-    #    AI suggests:  allowed_methods = request.url_rule.methods
-    #
-    # Learned:   1. Apparently a flask 'route' is a location on dir tree.
-    #            2. Routes are assigned methods
-    #            3. @ syntax is for 'Python Decorators'
-    ############################################################################
-    # ### idea1
-    # def test_warn_if_http_method_is_unsupported(self, client):
-    #     """If warn_if_http_method_is_unsupported() works right,
-    #     then a get request to a route without GET method authorization
-    #     """
-    #     msg = client.post('/counters/e405')  #creates '/counter/e405'
-    #     # d_result = client.delete('/counters/e405')  #should fail as 'delete' isn't authorized?
-
-    #     # get_msg = client.get('/counters/e405')
-    #     # Above does not fail, even though get_msg.status_code == 405
-    #     # assert get_msg.status_code == status.HTTP_200_OK
-    #     # msg_status_code = get_msg.status_code
-    #     # assert get_msg.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-    #     # assert warn_if_http_method_is_unsupported(msg_status_code) == "warn"
-        
-    #     response = client.post('/counters/test_405')
-    #     unsupported_delete_response = client.delete('/counters/test_405')
-    #     assert unsupported_delete_response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-    # ###
-
-    ### idea2
-    # def test_method_is_supported(route, method):
-    #     assert method_is_supported(route, client, method) == True
-
-#NOTE this_test(self, client) here in test_counter
-#  while test(route, method) ..
+    # Test #11, Handle invalid HTTP methods [Ken Harvey]
+    def test_handle_invalid_http_methods(self, client):
+        """Fails to catch un-allowed HTTP method unless a route is created
+           which disallows the method.
+           Once the route /counters/error/<id> is created (in counter.py) with
+           methods=['GET'], the following post will indeed return 405"""
+        # fail if no route, of course
+        result = client.post('/counters/error/id')  # line#1 POST is not allowed on this route
+        # result = client.get('/counters/error/id') # line#2 this is ok
+        assert result.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+        # I would first check that the route exists, but then this TDD does not fail
+        # before the implementation is created in counter.py
+ 
