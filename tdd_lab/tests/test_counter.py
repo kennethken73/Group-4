@@ -38,7 +38,17 @@ class TestCounterEndpoints:
         result = client.post('/counters/foo')
         # check if we were successful
         assert result.status_code == status.HTTP_409_CONFLICT
-        
+
+    # Test #3: Retrieve an existing counter.
+    def test_retrieve_existing_counter(self, client):
+        """It should retrieve an existing counter"""
+        # create a test counter
+        client.post('/counters/retrieveCounterTest')
+        # retrieve counter using GET method
+        response = client.get('/counters/retrieveCounterTest')
+        # verify succesful request
+        assert response.status_code == status.HTTP_200_OK
+
     # Test #5: Increment existing counter.
     def test_increment_counter(self, client):
             """It should increment an existing counter using PUT /counters/<name>."""
