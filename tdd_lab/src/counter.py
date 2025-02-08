@@ -55,6 +55,15 @@ def increment_counter(name):
     COUNTERS[name] += 1
     return jsonify({name: COUNTERS[name]}), status.HTTP_200_OK
 
+# Student 6: Prevent updating non-existent counter
+@app.route('/counters/<name>', methods=['PUT'])
+def prevent_updating_non_existent_counter(name):
+    """Prevent updating non-existent counter"""
+    if not counter_exists(name):
+        return jsonify({"error": f"Counter {name} does not exist"}), status.HTTP_404_NOT_FOUND
+    
+    return jsonify({name: COUNTERS[name]}), status.HTTP_200_OK
+
 
 # student 7: delete a counter
 @app.route('/counters/<name>', methods=['DELETE'])

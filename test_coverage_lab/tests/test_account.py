@@ -240,6 +240,24 @@ def test_deposit_zero_negative():
 # - Ensure `withdraw()` correctly decreases the account balance.
 # - Verify that withdrawals within available balance succeed.
 
+# ===========================
+# Test: Test valid withdrawal
+# Author: Parham Pahlavan
+# Date: 2025-02-07
+# Description: Ensure that withdrawal is valid
+# ===========================
+def test_invalid_withdrawal():
+    """Test invalid withdrawal"""
+    account = Account(name="Parham", email="pahlavan@example.com", balance=200)
+    balance = account.balance
+
+    # Withdraw some legal amount from the balance.
+    with pytest.raises(DataValidationError):
+        account.withdraw(50)
+    
+    # Checking if the account balanace is equal to what it should be.
+    assert account.balance == balance, "Balance should be correctly added to with withdrawal"
+
 # TODO 7: Test Withdrawal with Insufficient Funds
 # - Ensure `withdraw()` raises an error when attempting to withdraw more than available balance.
 # - Verify that the balance remains unchanged after a failed withdrawal.

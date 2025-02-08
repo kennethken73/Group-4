@@ -71,6 +71,14 @@ class TestCounterEndpoints:
             assert "incrementTest" in data
             assert data["incrementTest"] == 1
 
+    # Test #6: Prevent updating non-existent counter
+    def test_prevent_updating_non_existent_counter(self, client):
+        """It should prevent updating a non-existent counter"""
+        # Attempting to increment a counter that doesn't exist
+        result = client.put('/counters/nonexistent')
+        # Check if a not found status code was returned
+        assert result.status_code == status.HTTP_404_NOT_FOUND
+
     # Test #7: Delete a counter
     def test_delete_counter(self, client):
         """It should delete a counter"""
