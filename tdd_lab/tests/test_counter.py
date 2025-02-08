@@ -49,6 +49,14 @@ class TestCounterEndpoints:
         # verify succesful request
         assert response.status_code == status.HTTP_200_OK
 
+    # Test #3: Return 404 for non-existent counter
+    # Tanner Donovan
+            def test_return_404_for_non_existent_counter(self, client):
+        """Test that a 404 is returned for a non-existent counter"""
+        result = client.get('/counters/nonexistent')
+        assert result.status_code == status.HTTP_404_NOT_FOUND
+        
+=======
     # Test #5: Increment existing counter.
     def test_increment_counter(self, client):
             """It should increment an existing counter using PUT /counters/<name>."""
