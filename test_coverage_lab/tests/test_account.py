@@ -223,10 +223,6 @@ def test_deposit_zero_negative():
 # - Ensure `withdraw()` correctly decreases the account balance.
 # - Verify that withdrawals within available balance succeed.
 
-# TODO 6: Test Valid Withdrawal
-# - Ensure `withdraw()` correctly decreases the account balance.
-# - Verify that withdrawals within available balance succeed.
-
 # ===========================
 # Test: Test valid withdrawal
 # Author: Parham Pahlavan
