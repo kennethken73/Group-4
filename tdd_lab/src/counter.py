@@ -74,6 +74,14 @@ def deleting_nonexistent_counter(name):
       return jsonify(name), status.HTTP_409_CONFLICT
    else:
       return jsonify(name), status.HTTP_200_OK
+   
+# Function #9: Reset all counters
+@app.route('/counters/reset', methods=['POST'])
+def reset_all_counters():
+   """Resets all counters to 0"""
+   for counter in COUNTERS:
+        COUNTERS[counter] = 0
+   return jsonify(COUNTERS), status.HTTP_200_OK
 
 # Function #10: List counters
 @app.route('/counters', methods=['GET'])
@@ -90,6 +98,12 @@ def handle_invalid_http_methods(id):
      so long as no other permissions were set elsewhere for this route.
   """
   print('Setting GET as method for route: /counters/error/<id>')
+
+@app.route('/counters', methods=['DELETE'])
+def delete_all_counters():
+    """Delete all counters"""
+    COUNTERS.clear()
+    return jsonify({"message": "All counters have been deleted"}), status.HTTP_200_OK
 
 
 
