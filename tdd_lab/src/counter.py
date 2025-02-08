@@ -29,7 +29,6 @@ def increment_counter(name):
 
 
 # student 7: delete a counter
-# Adam Hamou
 @app.route('/counters/<name>', methods=['DELETE'])
 def delete_counter(name):
     """Delete a counter."""
