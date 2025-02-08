@@ -18,6 +18,16 @@ def create_counter(name):
   COUNTERS[name] = 0
   return jsonify({name: COUNTERS[name]}), status.HTTP_201_CREATED
 
+
+=======
+# Student 3: Retrieve an existing counter
+@app.route('/counters/<name>', methods=['GET'])
+def retrieve_counter(name):
+    """Retrieve an existing counter"""
+    if not counter_exists(name):
+        return jsonify({"error": f"Counter {name} does not exist"}), status.HTTP_404_NOT_FOUND
+    return jsonify({name: COUNTERS[name]}), status.HTTP_200_OK
+
 #Student 4: Return 404 if nonexistent counter.
 # Code has been refactored -- Tanner Donovan
 def counter_exists(name):
@@ -35,7 +45,6 @@ def get_counter(name):
 def handle_not_found_error(error):
     """Handle 404 errors"""
     return jsonify({"error": "Resource not found"}), status.HTTP_404_NOT_FOUND
-
 
 # Student 5: Increment a counter
 @app.route('/counters/<name>', methods=['PUT'])
