@@ -71,6 +71,37 @@ class TestCounterEndpoints:
         # Check if a conflict status code was returned
         assert result.status_code == status.HTTP_409_CONFLICT
 
+    # Test #9: Reset all counters
+    def test_reset_all_counters(self, client):
+        """It should reset all counters to 0"""
+        # Create multiple counters
+        client.post('/counters/testcounter1')
+        client.post('/counters/testcounter2')
+        client.post('/counters/testcounter3')
+
+        # Increment the counters
+        client.put('/counters/testcounter1')
+        client.put('/counters/testcounter1')
+        client.put('/counters/testcounter2')
+
+        # Verify counters are incremented
+        response = client.get('/counters')
+        counters = response.get_json()
+        assert counters["testcounter1"] == 2
+        assert counters["testcounter2"] == 1
+        assert counters["testcounter3"] == 0
+
+        # Reset all counters
+        reset_response = client.post('/counters/reset')
+        assert reset_response.status_code == status.HTTP_200_OK
+
+        # Verify all counters are reset to 0
+        response_after_reset = client.get('/counters')
+        counters_after_reset = response_after_reset.get_json()
+        assert counters_after_reset["testcounter1"] == 0
+        assert counters_after_reset["testcounter2"] == 0
+        assert counters_after_reset["testcounter3"] == 0
+
     # Test #10, listing all counters
     def test_list_counters(self, client):
         """It should list all counters"""

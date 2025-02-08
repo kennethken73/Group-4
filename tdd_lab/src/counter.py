@@ -46,6 +46,14 @@ def deleting_nonexistent_counter(name):
       return jsonify(name), status.HTTP_409_CONFLICT
    else:
       return jsonify(name), status.HTTP_200_OK
+   
+# Function #9: Reset all counters
+@app.route('/counters/reset', methods=['POST'])
+def reset_all_counters():
+   """Resets all counters to 0"""
+   for counter in COUNTERS:
+        COUNTERS[counter] = 0
+   return jsonify({"message": "All counters have been reset to 0"}), status.HTTP_200_OK
 
 # Function #10: List counters
 @app.route('/counters', methods=['GET'])
