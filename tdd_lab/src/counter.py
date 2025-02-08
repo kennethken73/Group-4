@@ -27,6 +27,17 @@ def increment_counter(name):
     COUNTERS[name] += 1
     return jsonify({name: COUNTERS[name]}), status.HTTP_200_OK
 
+
+# student 7: delete a counter
+@app.route('/counters/<name>', methods=['DELETE'])
+def delete_counter(name):
+    """Delete a counter."""
+    if not counter_exists(name):
+        return jsonify({"error": f"Counter {name} does not exist"}), status.HTTP_409_CONFLICT
+    del COUNTERS[name]
+    return jsonify({name: None}), status.HTTP_200_OK
+
+
 # Function #8: Prevent deleting non-existent counter
 @app.route('/counters/<name>', methods=['DELETE'])
 def deleting_nonexistent_counter(name):
