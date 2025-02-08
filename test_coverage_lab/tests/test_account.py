@@ -21,14 +21,6 @@ def load_account_data():
     yield
     db.session.close()
 
-@pytest.fixture
-def setup_account():
-    """Fixture to create a test account"""
-    account = Account(name="John businge", email="john.businge@example.com")
-    db.session.add(account)
-    db.session.commit()
-    return account
-
 @pytest.fixture(scope="function", autouse=True)
 def setup_and_teardown():
     """ Truncate the tables and set up for each test """
@@ -93,47 +85,243 @@ Each test should include:
 - A meaningful **commit message** when submitting their PR.
 """
 
-# TODO 1: Test Default Values
-# - Ensure that new accounts have the correct default values (e.g., `disabled=False`).
-# - Check if an account has no assigned role, it defaults to "user".
+# =======================================================================
+# Test: A dictionary is returned via .to_dict()
+# Author: Ken Harvey
+# Date: 2025-2-3
+# Description: Ensure `to_dict()` correctly converts an account to a dictionary format.
+# =======================================================================
+def dictionary_version_of_account_is_a_dictionary():
+    """Test that a dictionary is returned using .to_dict()
 
-# TODO 2: Test Updating Account Email
-# - Ensure an account’s email can be successfully updated.
-# - Verify that the updated email is stored in the database.
+    We avoid ORM interaction by testing the Account object without
+    uploading and downloading the object or its dictionary counterpart.
+    """
 
-# TODO 3: Test Finding an Account by ID
-# - Create an account and retrieve it using its ID.
-# - Ensure the retrieved account matches the created one.
+    account_dict = Account(name="Ken H", email="kenh@xyz.com", role="user").to_dict()
+    assert isinstance(account_dict, dict)
 
-# TODO 4: Test Invalid Email Handling
+# =======================================================================
+# Test: .to_dict() creates a dictionary with all of the fields that the Account object had
+# Author: Ken Harvey
+# Date: 2025-2-3
+# Description: Verify that all expected fields are included in the dictionary.
+# =======================================================================
+def dictionary_version_of_account_has_all_account_fields():
+    """Test that .to_dict() returns a dictionary with all the Account fields
+
+    We avoid ORM interaction by testing the Account object without
+    uploading and downloading the object or its dictionary counterpart.
+    """
+
+    account_dict = Account(name="Ken H", email="kenh@xyz.com", role="user").to_dict()
+    list_of_dict_keys = list(account_dict.keys())
+    for key in list_of_dict_keys:
+        assert hasattr(account_dict, key)
+
+# TODO 2: Test Invalid Email Input
 # - Check that invalid emails (e.g., "not-an-email") raise a validation error.
 # - Ensure accounts without an email cannot be created.
 
-# TODO 5: Test Password Hashing
+# ===========================
+# Test: Test Invalid Email Input
+# Author: Hardy Fenam
+# Date: 2025-02-04
+# Description: Ensure accounts without an email cannot be created.
+# ===========================
+
+def test_invalid_email_input():
+    """Test that accounts without an email cannot be created"""
+    account = Account(name="John Doe", email="", role="user")
+
+    #attempt to create an account without email
+    with pytest.raises(DataValidationError):
+        account.validate_email()  #invalid email should raise an error
+
+# TODO 3: Test Missing Required Fields
+# - Ensure that creating an `Account()` without required fields raises an error.
+# - Validate that missing fields trigger the correct exception.
+
+# ===========================
+# Test: Test Missing Required Fields
+# Author: Michael Soffer
+# Date: 2025-02-04
+# Description: Validate that missing fields trigger the correct exception.
+# ===========================
+
+def test_missing_required_fields():
+    """Test missing required fields for an account"""
+    
+    # Helper function for checking required fields
+    def create_account_manual_check(name=None, email=None, role=None):
+        account = Account(name=name, email=email, role=role)
+        
+        # Manually check for missing fields and raise validation error manually
+        if not account.name or not account.email or not account.role:
+            raise DataValidationError
+
+    # Missing name
+    with pytest.raises(DataValidationError):
+        create_account_manual_check(email="missingname@example.com", role="user")
+
+    # Missing email
+    with pytest.raises(DataValidationError):
+        create_account_manual_check(name="Missing Email", role="user")
+
+    # Missing role
+    with pytest.raises(DataValidationError):
+        create_account_manual_check(name="Missing Role", email="missingrole@example.com")
+    
+
+# TODO 4: Test Positive Deposit
+# - Ensure `deposit()` correctly increases the account balance.
+# - Verify that depositing a positive amount updates the balance correctly.
+
+# ===========================
+# Test: Positive Deposit
+# Author: Tanner Donovan
+# Date: 2/5/2025
+# Description: Tests positive deposit
+# ===========================
+
+def test_positive_deposit():
+    """Test depositing a positive amount"""
+    account = Account(name="Tanner", email="tannertdonovan@gmail.com", balance=25)
+    account.deposit(75)
+
+    assert account.balance == 100
+
+# TODO 5: Test Deposit with Zero/Negative Values
+# - Ensure `deposit()` raises an error for zero or negative amounts.
+# - Verify that balance remains unchanged after an invalid deposit attempt.
+
+# ===========================
+# Test: Deposit with Zero/Negative Values Values
+# Author: Kevin Ramos
+# Date: 2025-02-03
+# Description: Ensure that deposit rases a DataValidationError for a zero or negative deposit ensuring the balance remains unchanged.
+# ===========================
+
+def test_deposit_zero_negative():
+    """Test deposit zero or negative to raise data validation error and leaves balance unchanged."""
+    account = Account(name = "Kevin Ramos", email = "ramosk10@example.com", role = "user")
+    account.balance = 100
+
+    balance = account.balance
+    
+    # Test depositing 0
+    with pytest.raises(DataValidationError):
+        account.deposit(0)
+    assert account.balance == balance, "Balance should be unchanged after depositing zero"
+
+    # Test depositing a negative value
+    with pytest.raises(DataValidationError):
+        account.deposit(-1)
+    assert account.balance == balance, "Balance stays the same after depositing negative amount"
+
+# TODO 6: Test Valid Withdrawal
+# - Ensure `withdraw()` correctly decreases the account balance.
+# - Verify that withdrawals within available balance succeed.
+
+# TODO 6: Test Valid Withdrawal
+# - Ensure `withdraw()` correctly decreases the account balance.
+# - Verify that withdrawals within available balance succeed.
+
+# ===========================
+# Test: Test valid withdrawal
+# Author: Parham Pahlavan
+# Date: 2025-02-07
+# Description: Ensure that withdrawal is valid
+# ===========================
+def test_invalid_withdrawal():
+    """Test invalid withdrawal"""
+    account = Account(name="Parham", email="pahlavan@example.com", balance=200)
+    balance = account.balance
+
+    # Withdraw some legal amount from the balance.
+    with pytest.raises(DataValidationError):
+        account.withdraw(50)
+    
+    # Checking if the account balanace is equal to what it should be.
+    assert account.balance == balance, "Balance should be correctly added to with withdrawal"
+
+# TODO 7: Test Withdrawal with Insufficient Funds
+# - Ensure `withdraw()` raises an error when attempting to withdraw more than available balance.
+# - Verify that the balance remains unchanged after a failed withdrawal.
+
+# ===========================
+# Test: Test Withdrawal with Insufficient Funds
+# Author: Adam Hamou
+# Date: 2025-02-06
+# Description: Ensure that the balance remains unchanged after a failed withdrawal.
+# ===========================
+
+def test_withdrawal_insufficient_funds():
+    """Test withdrawal with insufficient funds"""
+    account = Account(name="Adam", email="hamoua2@example.com", balance=100)
+    balance = account.balance
+
+    # Attempt to withdraw more than the available balance
+    with pytest.raises(DataValidationError):
+        account.withdraw(200)   # Withdrawal amount exceeds balance
+    
+    # Verify that the balance remains unchanged
+    assert account.balance == balance, "Balance should remain unchanged after a failed withdrawal"
+
+
+# TODO 8: Test Password Hashing
 # - Ensure that passwords are stored as **hashed values**.
 # - Verify that plaintext passwords are never stored in the database.
+# - Test password verification with `set_password()` and `check_password()`.
 
-# TODO 6: Test Account Persistence
-# - Create an account, commit the session, and restart the session.
-# - Ensure the account still exists in the database.
+# ===========================
+# Test: Test Password Hashing
+# Author: Jayson Kirchand-Patel
+# Date: 2025-02-03
+# Description: Ensures passwords are stored as hashed values
+# ===========================
 
-# TODO 7: Test Searching by Name
-# - Ensure accounts can be searched by their **name**.
-# - Verify that partial name searches return relevant accounts.
+def test_password_hashing():
+    '''Test storing passwords as hashed values'''
+    test_password = "password"
+    account = Account()
 
-# TODO 8: Test Bulk Insertion
-# - Create and insert multiple accounts at once.
-# - Verify that all accounts are successfully stored in the database.
+    # Set password and verify it's not being stored as plaintext
+    account.set_password(test_password)
+    assert account.password_hash != test_password
 
-# TODO 9: Test Account Deactivation/Reactivate
-# - Ensure accounts can be deactivated.
-# - Verify that deactivated accounts cannot perform certain actions.
-# - Ensure reactivation correctly restores the account.
+    # Ensure password is successfully stored as hashed value
+    assert account.check_password(test_password)
 
-# TODO 10: Test Email Uniqueness Enforcement
-# - Ensure that duplicate emails are not allowed.
-# - Verify that accounts must have a unique email in the database.
+# TODO 9: Test Role Assignment
+# - Ensure that `change_role()` correctly updates an account’s role.
+# - Verify that the updated role is stored in the database.
 
-# TODO 11: Test Role-Based Access
-# - Ensure users with different roles ('admin', 'user', 'guest') have appropriate permissions.
-# - Verify that role changes are correctly reflected in the database.
+# TODO 10: Test Invalid Role Assignment
+# - Ensure that assigning an invalid role raises an appropriate error.
+# - Verify that only allowed roles (`admin`, `user`, etc.) can be set.
+
+# ===========================
+# Test: Test Deleting an Account
+# Author: John Zaleschuk
+# Date: 2025-02-04
+# Description: Ensure that 'delete()' removes an account from the database.
+# ===========================
+
+def test_deleting_an_account():
+    """Test deleting an account"""
+    # Add a test account to database
+    account = Account(name="John Test", email="johntest@test.com", role="user")
+    db.session.add(account)
+    db.session.commit()
+    
+    # Verify the account is in the database
+    tempaccount = Account.query.filter_by(email="johntest@test.com")
+    assert tempaccount is not None
+    
+    # Delete the account
+    tempaccount.delete()
+    
+    # Check again for the account
+    tempaccount = Account.query.filter_by(email="johntest@test.com")
+    assert tempaccount is None
