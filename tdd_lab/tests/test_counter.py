@@ -74,33 +74,42 @@ class TestCounterEndpoints:
     # Test #9: Reset all counters
     def test_reset_all_counters(self, client):
         """It should reset all counters to 0"""
+        # Delete all current counters 
+        client.delete('/counters')
+
         # Create multiple counters
         client.post('/counters/testcounter1')
         client.post('/counters/testcounter2')
-        client.post('/counters/testcounter3')
+        tc3_response = client.post('/counters/testcounter3')
 
         # Increment the counters
         client.put('/counters/testcounter1')
-        client.put('/counters/testcounter1')
-        client.put('/counters/testcounter2')
+        tc1_response = client.put('/counters/testcounter1')
+        tc2_response = client.put('/counters/testcounter2')
 
         # Verify counters are incremented
-        response = client.get('/counters')
-        counters = response.get_json()
-        assert counters["testcounter1"] == 2
-        assert counters["testcounter2"] == 1
-        assert counters["testcounter3"] == 0
+        data1 = tc1_response.get_json()
+        data2 = tc2_response.get_json()
+        data3 = tc3_response.get_json()
+
+        assert tc1_response.status_code == status.HTTP_200_OK
+        assert data1["testcounter1"] == 2
+
+        assert tc2_response.status_code == status.HTTP_200_OK
+        assert data2["testcounter2"] == 1
+
+        assert tc3_response.status_code == status.HTTP_201_CREATED
+        assert data3["testcounter3"] == 0
 
         # Reset all counters
         reset_response = client.post('/counters/reset')
+        data_reset_response = reset_response.get_json()
         assert reset_response.status_code == status.HTTP_200_OK
 
         # Verify all counters are reset to 0
-        response_after_reset = client.get('/counters')
-        counters_after_reset = response_after_reset.get_json()
-        assert counters_after_reset["testcounter1"] == 0
-        assert counters_after_reset["testcounter2"] == 0
-        assert counters_after_reset["testcounter3"] == 0
+        assert data_reset_response["testcounter1"] == 0
+        assert data_reset_response["testcounter2"] == 0
+        assert data_reset_response["testcounter3"] == 0
 
     # Test #10, listing all counters
     def test_list_counters(self, client):
