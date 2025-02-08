@@ -36,7 +36,7 @@ def getCommitRecord():
  branch_list = repo.get_branches()
  commit_list = repo.get_commits()
  branch_count = branch_list.totalCount
- # print(commit_list) # returns PaginatedList
+ print(commit_list) # returns PaginatedList
  
  commit_count = commit_list.totalCount
  print('Total number of commits:  ', commit_count, '\n')
@@ -46,7 +46,8 @@ def getCommitRecord():
  file_id = 0 # counter to index unique files. Two same-named files assigned the same id. Newly indexed per run of this function.
  commit_names = {} # k/v pair name->id. Untested for same-named files in different directories.
  for commit in commit_list:
-  commit_author = commit.author.name
+  if commit.author:
+   commit_author = commit.author.name
   commit_date = commit.commit.author.date
   week_n = commit_date.isocalendar().week # calendar week (week 1 includes Jan 1st)
   week_n -= 3 # Class begun on calendar.week == 4, so that week is group-4's first week. Subtract 3.

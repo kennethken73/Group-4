@@ -87,7 +87,7 @@ def collect_authors_and_dates(repo, lsttokens, source_extensions):
 if __name__ == "__main__":
 
     repo = "scottyab/rootbeer"
-    lstTokens = ["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"]
+    lstTokens = [""]
 
     source_extensions = ['.py', '.java', '.c', '.cpp', '.js', '.ts']
 
