@@ -29,6 +29,14 @@ def setup_account():
     db.session.commit()
     return account
 
+@pytest.fixture
+def setup_disabled_account():
+    """Fixture to create a test account"""
+    account = Account(name="John businge", email="john.businge@example.com", disabled=True)
+    db.session.add(account)
+    db.session.commit()
+    return account
+
 @pytest.fixture(scope="function", autouse=True)
 def setup_and_teardown():
     """ Truncate the tables and set up for each test """
@@ -129,6 +137,33 @@ Each test should include:
 # - Ensure accounts can be deactivated.
 # - Verify that deactivated accounts cannot perform certain actions.
 # - Ensure reactivation correctly restores the account.
+
+# ===========================
+# Test: Account Deactivation/Reactivate
+# Author: Richard Vargason
+# Date: 2025-02-07
+# Description: Ensure accounts be deactivated and reactivated
+# ===========================
+
+def test_account_deactivate(setup_account):
+    """Test deactivating an account"""
+    account = setup_account
+    assert account.disabled is False
+
+    account.deactivate()
+    db.session.commit()
+
+    assert account.disabled is True
+    
+def test_account_reactivate(setup_disabled_account):
+    """Test reactivating a disabled account"""
+    account = setup_disabled_account
+    assert account.disabled is True
+
+    account.reactivate()
+    db.session.commit()
+
+    assert account.disabled is False
 
 # TODO 10: Test Email Uniqueness Enforcement
 # - Ensure that duplicate emails are not allowed.
