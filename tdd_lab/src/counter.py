@@ -19,7 +19,6 @@ def create_counter(name):
   return jsonify({name: COUNTERS[name]}), status.HTTP_201_CREATED
 
 
-=======
 # Student 3: Retrieve an existing counter
 @app.route('/counters/<name>', methods=['GET'])
 def retrieve_counter(name):
