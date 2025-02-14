@@ -73,6 +73,7 @@
 /ci_lab/src/status.py
 /ci_lab/__pycache__/ 
 /ci_lab/*.pyc
+/ci_lab/src/counter.py
 
 ## Your name
 #
