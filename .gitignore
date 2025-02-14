@@ -64,16 +64,16 @@
 # Ignore Python cache files and environment-related files inside ci_lab
 /ci_lab/.coverage
 /ci_lab/.DS_Store
-/ci_lab/LICENSE
-/ci_lab/README.md
-/ci_lab/pytest.ini
-/ci_lab/requirements.txt
-/ci_lab/tests/__init__.py
-/ci_lab/src/__init__.py
-/ci_lab/src/status.py
-/ci_lab/__pycache__/ 
-/ci_lab/*.pyc
-/ci_lab/src/counter.py
+/ci_lab/test.db
+/ci_lab/.pytest_cache/
+/ci_lab/instance/
+/ci_lab/migrations/
+/ci_lab/__pycache__/
+/ci_lab/src/__pycache__/
+/ci_lab/tests/__pycache__/
+/ci_lab/tests/fixtures/
+/ci_lab/tests/.DS_Store
+/ci_lab/.pyc
 
 ## Your name
 #
