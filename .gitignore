@@ -62,12 +62,9 @@
 
 ## Kevin's gitignore for ci_lab
 # Ignore Python cache files and environment-related files inside ci_lab
-/ci_lab/__pycache__/
-/ci_lab/*.pyc
 /ci_lab/.coverage
-/ci_lab/venv/
-/ci_lab/.env
 /ci_lab/.DS_Store
+/ci_lab/LICENSE
 /ci_lab/README.md
 /ci_lab/pytest.ini
 /ci_lab/requirements.txt
