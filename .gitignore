@@ -71,6 +71,8 @@
 /ci_lab/tests/__init__.py
 /ci_lab/src/__init__.py
 /ci_lab/src/status.py
+/ci_lab/__pycache__/ 
+/ci_lab/*.pyc
 
 ## Your name
 #
