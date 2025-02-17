@@ -113,7 +113,7 @@ class TestCounterEndpoints:
 
     # ===========================
     # Test: Retrieve top N highest counters
-    # Author: Student 2
+    # Author: Student 2 - Hardy Fenam
     # Modification: Ensure the API returns exactly N counters.
     # ===========================
     def test_top_n_counters(self, client):
@@ -124,6 +124,7 @@ class TestCounterEndpoints:
         client.put('/counters/a')
         client.put('/counters/b')
         client.put('/counters/b')
+        # final values: b=2, a=1, reset=0
 
         response = client.get('/counters/top/2')
 
@@ -131,6 +132,7 @@ class TestCounterEndpoints:
         assert len(response.get_json()) <= 2  
 
         # TODO: Add an assertion to ensure the returned counters are sorted correctly
+        assert response.get_json() == {"b": 2, "a": 1}
 
     # ===========================
     # Test: Retrieve top N lowest counters
