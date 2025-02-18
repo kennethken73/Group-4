@@ -216,10 +216,13 @@ class TestCounterEndpoints:
         assert response.status_code == HTTPStatus.NOT_FOUND
 
         # TODO: Add an assertion to verify the error message contains the word 'not found'
+        ErrorMess = response.get_json().get("error", "")
+        assert "not found" in ErrorMess.lower(), "Error: Counter Not Found"
+
 
     # ===========================
     # Test: Get total number of counters
-    # Author: Student 8
+    # Author: Student 8 - Jayson Kirchand-Patel
     # Modification: Add assertion to check count is an integer.
     # ===========================
     def test_get_total_number_of_counters(self, client):
@@ -234,6 +237,7 @@ class TestCounterEndpoints:
         assert isinstance(response.get_json()["count"], int)  
 
         # TODO: Add an assertion to check the exact count value
+        assert response.get_json()["count"] == 2
 
     # ===========================
     # Test: Retrieve counters with values greater than a threshold
@@ -272,7 +276,7 @@ class TestCounterEndpoints:
 
     # ===========================
     # Test: Validate counter names (prevent special characters)
-    # Author: Student 11
+    # Author: Student 11 - John Zaleschuk
     # Modification: Ensure error message is specific.
     # ===========================
     def test_validate_counter_name(self, client):
@@ -282,3 +286,4 @@ class TestCounterEndpoints:
         assert response.status_code == HTTPStatus.BAD_REQUEST
 
         # TODO: Add an assertion to verify the error message specifically says 'Invalid counter name'S
+        assert 'Invalid counter name' in response.get_json().get('error', '')
