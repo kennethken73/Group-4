@@ -60,6 +60,20 @@
 **/__pycache__
 *.swp
 
+## Kevin's gitignore for ci_lab
+# Ignore Python cache files and environment-related files inside ci_lab
+/ci_lab/.coverage
+/ci_lab/.DS_Store
+/ci_lab/test.db
+/ci_lab/.pytest_cache/
+/ci_lab/instance/
+/ci_lab/migrations/
+/ci_lab/__pycache__/
+/ci_lab/src/__pycache__/
+/ci_lab/tests/__pycache__/
+/ci_lab/tests/fixtures/
+/ci_lab/tests/.DS_Store
+/ci_lab/.pyc
 
 ## Your name
 #

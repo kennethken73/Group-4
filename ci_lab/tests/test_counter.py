@@ -113,7 +113,7 @@ class TestCounterEndpoints:
 
     # ===========================
     # Test: Retrieve top N highest counters
-    # Author: Student 2
+    # Author: Student 2 - Hardy Fenam
     # Modification: Ensure the API returns exactly N counters.
     # ===========================
     def test_top_n_counters(self, client):
@@ -124,6 +124,7 @@ class TestCounterEndpoints:
         client.put('/counters/a')
         client.put('/counters/b')
         client.put('/counters/b')
+        # final values: b=2, a=1, reset=0
 
         response = client.get('/counters/top/2')
 
@@ -131,10 +132,11 @@ class TestCounterEndpoints:
         assert len(response.get_json()) <= 2  
 
         # TODO: Add an assertion to ensure the returned counters are sorted correctly
+        assert response.get_json() == {"b": 2, "a": 1}
 
     # ===========================
     # Test: Retrieve top N lowest counters
-    # Author: Student 3
+    # Author: Student 3 - Michael Soffer
     # Modification: Ensure lowest counter has value 0.
     # ===========================
     def test_bottom_n_counters(self, client):
@@ -149,6 +151,8 @@ class TestCounterEndpoints:
         assert min(response.get_json().values()) == 0  
 
         # TODO: Add an assertion to check that 'b' is indeed in the response
+        response_data = response.get_json()
+        assert any(counter in response_data for counter in ['a', 'b']), "Expected at least one of 'a' or 'b' to be in the response, but none were found."
 
     # ===========================
     # Test: Set a counter to a specific value
@@ -181,6 +185,8 @@ class TestCounterEndpoints:
         assert response_negative.status_code == HTTPStatus.BAD_REQUEST  
         
         # TODO: Add an assertion to verify the response message contains a clear error
+        error_message = response_negative.get_json().get("error", "")
+        assert "negative" in error_message.lower(), "Error: Negative Values Not Allowed"
 
     # ===========================
     # Test: Reset a single counter
@@ -211,6 +217,8 @@ class TestCounterEndpoints:
         assert response.status_code == HTTPStatus.NOT_FOUND
 
         # TODO: Add an assertion to verify the error message contains the word 'not found'
+        ErrorMess = response.get_json().get("error", "")
+        assert "not found" in ErrorMess.lower(), "Error: Counter Not Found"
 
     # ===========================
     # Test: Get total number of counters
@@ -267,7 +275,7 @@ class TestCounterEndpoints:
 
     # ===========================
     # Test: Validate counter names (prevent special characters)
-    # Author: Student 11
+    # Author: Student 11 - John Zaleschuk
     # Modification: Ensure error message is specific.
     # ===========================
     def test_validate_counter_name(self, client):
@@ -277,3 +285,4 @@ class TestCounterEndpoints:
         assert response.status_code == HTTPStatus.BAD_REQUEST
 
         # TODO: Add an assertion to verify the error message specifically says 'Invalid counter name'S
+        assert 'Invalid counter name' in response.get_json().get('error', '')
