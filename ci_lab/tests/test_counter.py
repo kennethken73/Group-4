@@ -240,7 +240,7 @@ class TestCounterEndpoints:
 
     # ===========================
     # Test: Retrieve counters with values greater than a threshold
-    # Author: Student 9
+    # Author: Student 9 - Richard Vargason
     # Modification: Ensure the threshold is exclusive.
     # ===========================
     def test_counters_greater_than_threshold(self, client):
