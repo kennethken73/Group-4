@@ -215,6 +215,9 @@ class TestCounterEndpoints:
         assert response.status_code == HTTPStatus.NOT_FOUND
 
         # TODO: Add an assertion to verify the error message contains the word 'not found'
+        ErrorMess = response.get_json().get("error", "")
+        assert "not found" in ErrorMess.lower(), "Error: Counter Not Found"
+
 
     # ===========================
     # Test: Get total number of counters
