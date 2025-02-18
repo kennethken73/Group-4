@@ -258,7 +258,7 @@ class TestCounterEndpoints:
 
     # ===========================
     # Test: Retrieve counters with values less than a threshold
-    # Author: Student 10
+    # Author: Student 10 - Ken Harvey
     # Modification: Ensure threshold is exclusive.
     # ===========================
     def test_counters_less_than_threshold(self, client):
@@ -268,11 +268,16 @@ class TestCounterEndpoints:
         client.post('/counters/b')
         client.put('/counters/a/set/5')
 
-        response = client.get('/counters/less/5')
+        client.put('/counters/b/set/2')
+        # alternatively (.put twice to increment the 'b' counter)
+        # client.put('/counters/b')
+        # client.put('/counters/b')
 
+        response = client.get('/counters/less/5')
         assert response.status_code == HTTPStatus.OK
 
-        # TODO: Add an assertion to ensure 'b' (value=2) is returned as the lowest.
+        # DONE: Add an assertion to ensure 'b' (value=2) is returned as the lowest.
+        assert response.get_json() == {"b": 2}
 
     # ===========================
     # Test: Validate counter names (prevent special characters)
