@@ -136,7 +136,7 @@ class TestCounterEndpoints:
 
     # ===========================
     # Test: Retrieve top N lowest counters
-    # Author: Student 3
+    # Author: Student 3 - Michael Soffer
     # Modification: Ensure lowest counter has value 0.
     # ===========================
     def test_bottom_n_counters(self, client):
@@ -151,7 +151,8 @@ class TestCounterEndpoints:
         assert min(response.get_json().values()) == 0  
 
         # TODO: Add an assertion to check that 'b' is indeed in the response
-
+        response_data = response.get_json()
+        assert any(counter in response_data for counter in ['a', 'b']), "Expected at least one of 'a' or 'b' to be in the response, but none were found."
     # ===========================
     # Test: Set a counter to a specific value
     # Author: Student 4
