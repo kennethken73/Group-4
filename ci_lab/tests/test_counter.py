@@ -242,7 +242,7 @@ class TestCounterEndpoints:
 
     # ===========================
     # Test: Retrieve counters with values greater than a threshold
-    # Author: Student 9
+    # Author: Student 9 - Richard Vargason
     # Modification: Ensure the threshold is exclusive.
     # ===========================
     def test_counters_greater_than_threshold(self, client):
@@ -250,12 +250,19 @@ class TestCounterEndpoints:
         client.post('/counters/a')
         client.post('/counters/b')
         client.put('/counters/a/set/10')
+        client.put('/counters/b/set/15')
 
         response = client.get('/counters/greater/10')
 
         assert response.status_code == HTTPStatus.OK
 
-        # TODO: Add an assertion to check that 'a' (value=10) is **excluded**.
+        response_data = response.get_json()
+
+        assert "a" not in response_data, "If a == 10, should not be returned."
+
+        assert "b" in response_data, "If b == 15, it should be returned"
+        
+        assert response_data == {"b": 15}, "Only counters with values >10 should return"
 
     # ===========================
     # Test: Retrieve counters with values less than a threshold
