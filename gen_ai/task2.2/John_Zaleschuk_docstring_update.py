@@ -1,5 +1,5 @@
 import numpy as np
-from math import gcd
+from math import gcd  
 
 # Vectorized GCD function for efficient computation across arrays
 gcd_vectorized = np.vectorize(gcd)
