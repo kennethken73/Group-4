@@ -652,42 +652,105 @@ class ValidPromptedName extends Prompt {
     }
 }
 
-/** Return valid Calendar Object via getValidDate()*/
+/// Refactored by ChatGPT as below this commented-out section
+///  see: https://chatgpt.com/share/67c11cc5-1284-800a-a9da-6056c9e156a6
+//
+// /** Return valid Calendar Object via getValidDate()*/
+// class ValidPromptedDate extends ValidPromptedIntegerSet {
+//     private static final String prompt = "Provide a date in (XX-month, XX-day, XXXX-year) format";
+//     private static final int dateIntFieldCount = 3;
+//     Calendar c;
+//     public Calendar getValidDate() {
+//         c = Calendar.getInstance();
+//         while (true) {
+//             int[] numSet = getValidNumbers();
+//             if (numSet[0] > 12 || numSet[1] > 31 || numSet[2] < 1980
+//                     || numSet[0] <= 0 || numSet[1] <= 0 || numSet[2] < 0)
+//                 continue;
+//             numSet[0]--; // months are computed 0-11, but given by the user as 1-12
+//             c.clear();
+//             c.set(Calendar.MONTH, numSet[0]);
+//             c.set(Calendar.DATE, numSet[1]);
+//             c.set(Calendar.YEAR, numSet[2]);
+//             if (numSet[0] != c.get(Calendar.MONTH)
+//                     || numSet[1] != c.get(Calendar.DATE)
+//                     || numSet[2] != c.get(Calendar.YEAR)) {
+//                 System.out
+//                         .println("The given Calendar Date does not exist!");
+//                 continue;
+//             }
+//             break;
+//         }
+//         return c;
+//     }
+//     public ValidPromptedDate(Scanner scanner) {
+//         super(scanner, prompt, dateIntFieldCount);
+//     }
+//     public String quoteDate() {
+//         String formatedDate = new SimpleDateFormat("MM-dd-yyyy").format(c.getTime());
+//         return formatedDate;
+//     }
+// }
+
+// begin ChatGPT refactor
+//
+// import java.util.Calendar;
+// import java.util.Scanner;
+// import java.text.SimpleDateFormat;
+
+/** Return valid Calendar Object via getValidDate() */
 class ValidPromptedDate extends ValidPromptedIntegerSet {
-    private static final String prompt = "Provide a date in (XX-month, XX-day, XXXX-year) format";
-    private static final int dateIntFieldCount = 3;
-    Calendar c;
-    public Calendar getValidDate() {
-        c = Calendar.getInstance();
-        while (true) {
-            int[] numSet = getValidNumbers();
-            if (numSet[0] > 12 || numSet[1] > 31 || numSet[2] < 1980
-                    || numSet[0] <= 0 || numSet[1] <= 0 || numSet[2] < 0)
-                continue;
-            numSet[0]--; // months are computed 0-11, but given by the user as 1-12
-            c.clear();
-            c.set(Calendar.MONTH, numSet[0]);
-            c.set(Calendar.DATE, numSet[1]);
-            c.set(Calendar.YEAR, numSet[2]);
-            if (numSet[0] != c.get(Calendar.MONTH)
-                    || numSet[1] != c.get(Calendar.DATE)
-                    || numSet[2] != c.get(Calendar.YEAR)) {
-                System.out
-                        .println("The given Calendar Date does not exist!");
-                continue;
-            }
-            break;
-        }
-        return c;
-    }
+    private static final String DATE_PROMPT = "Provide a date in (MM-DD-YYYY) format";
+    private static final int DATE_FIELDS_COUNT = 3;
+    private static final int MIN_YEAR = 1980;
+
+    private Calendar calendar;
+
     public ValidPromptedDate(Scanner scanner) {
-        super(scanner, prompt, dateIntFieldCount);
+        super(scanner, DATE_PROMPT, DATE_FIELDS_COUNT);
     }
+
+    public Calendar getValidDate() {
+        calendar = Calendar.getInstance();
+        
+        while (true) {
+            int[] dateFields = getValidNumbers();
+            if (isValidDate(dateFields)) {
+                calendar.set(Calendar.YEAR, dateFields[2]);
+                calendar.set(Calendar.MONTH, dateFields[0] - 1); // Months are 0-based in Calendar
+                calendar.set(Calendar.DAY_OF_MONTH, dateFields[1]);
+                return calendar;
+            } else {
+                System.out.println("Invalid date! Ensure correct month, day, and year (≥ " + MIN_YEAR + ").");
+            }
+        }
+    }
+
+    private boolean isValidDate(int[] dateFields) {
+        int month = dateFields[0];
+        int day = dateFields[1];
+        int year = dateFields[2];
+
+        if (month < 1 || month > 12 || day < 1 || day > 31 || year < MIN_YEAR) {
+            return false;
+        }
+
+        // Validate against real-world dates
+        calendar.clear();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month - 1);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+
+        return calendar.get(Calendar.MONTH) == month - 1 &&
+               calendar.get(Calendar.DAY_OF_MONTH) == day &&
+               calendar.get(Calendar.YEAR) == year;
+    }
+
     public String quoteDate() {
-        String formatedDate = new SimpleDateFormat("MM-dd-yyyy").format(c.getTime());
-        return formatedDate;
+        return new SimpleDateFormat("MM-dd-yyyy").format(calendar.getTime());
     }
 }
+// end ChatGPT refactor
 
 /** Return an int from [1..5]
  ..looping until success.
