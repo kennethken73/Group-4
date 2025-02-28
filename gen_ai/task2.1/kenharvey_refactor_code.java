@@ -161,6 +161,12 @@ interface LotteryLineInterface extends resultsInterface {
  WinningPlay        |  A winning result, with its information
  */
 
+/**
+ * ChatGPT created class documentation:
+ *
+ * Represents a line of lottery numbers, containing five main numbers and a Mega number.
+ * The class ensures that the numbers are immutable once set.
+ */
 class LotteryNumberLine implements LotteryLineInterface {
     public static final int LOTTERY_NUMBERS_COUNT = 6;
     private final int n1, n2, n3, n4, n5, Mega;
